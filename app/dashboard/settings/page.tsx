@@ -5,18 +5,9 @@ import { useEffect, useState } from 'react';
 import {
    Save,
    Upload,
-   Palette,
-   Type,
-   Target,
+   Palette, Target,
    MessageSquare,
-   Hash,
-   Globe,
-   User,
-   Briefcase,
-   Heart,
-   Zap,
-   Shield,
-   Sparkles,
+   Hash, User, Heart, Sparkles,
    RefreshCw,
    Plus,
    X,
@@ -37,7 +28,7 @@ import {
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 
@@ -307,6 +298,9 @@ export default function BrandSettings() {
    const removeHashtag = (hashtag: string) => {
       updateField('hashtags', (settings.hashtags || []).filter(h => h !== hashtag));
    };
+   const getInitials = (name: string) => {
+      return name.split(' ').map(word => word[0]).join('');
+   }
 
    if (isFetchingSettings) {
       return (

@@ -36,44 +36,70 @@ export default function CreateContent() {
       setGenerationProgress(0);
       setGeneratedContent({});
 
-      const mockContent: Record<string, any> = {};
-      let totalGenerations = 0;
-
-      selectedPlatforms.forEach(platformId => {
-         const postTypes = selectedPostTypes[platformId] || ['post'];
-         postTypes.forEach(postType => {
-            const key = `${platformId}-${postType}`;
-            mockContent[key] = {
-               ...generateMockContent(
-                  platformId,
-                  postType,
-                  topic,
-                  brief
-               ),
-               targetName: platformId,
-               platformName: platformId,
-            };
-            totalGenerations++;
+      try {
+         const response = await fetch('/api/generate-content', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               topic,
+               brief,
+               platforms: selectedPlatforms,
+               postTypes: selectedPostTypes,
+               campaignId: selectedCampaign || undefined,
+               includeScheduling: true,
+               timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            }),
          });
-      });
 
-      // Simulate generation progress
-      if (totalGenerations > 0) {
-         let completed = 0;
-         const interval = setInterval(() => {
-            completed++;
-            setGenerationProgress((completed / totalGenerations) * 100);
+         if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to generate content');
+         }
 
-            if (completed >= totalGenerations) {
-               clearInterval(interval);
-               setGeneratedContent(mockContent);
-               setIsGenerating(false);
-               toast.success("Content generated successfully!");
-            }
-         }, 300);
-      } else {
+         const result = await response.json();
+
+         if (result.success && result.data) {
+            // Transform the response to match the expected format
+            const transformedContent: Record<string, any> = {};
+
+            Object.entries(result.data).forEach(([key, content]: [string, any]) => {
+               transformedContent[key] = {
+                  ...content,
+                  targetName: content.platform,
+                  platformName: content.platform,
+                  scheduling: result.scheduling?.[key] || null
+               };
+            });
+
+            setGeneratedContent(transformedContent);
+            setGenerationProgress(100);
+            toast.success("Content generated successfully!");
+         } else {
+            throw new Error('No content generated');
+         }
+      } catch (error) {
+         console.error('Content generation error:', error);
+         toast.error(error instanceof Error ? error.message : "Failed to generate content");
+
+      // Fallback to mock content if AI fails
+         const mockContent: Record<string, any> = {};
+         selectedPlatforms.forEach(platformId => {
+            const postTypes = selectedPostTypes[platformId] || ['post'];
+            postTypes.forEach(postType => {
+               const key = `${platformId}-${postType}`;
+               mockContent[key] = {
+                  ...generateMockContent(platformId, postType, topic, brief),
+                  targetName: platformId,
+                  platformName: platformId,
+               };
+            });
+         });
+         setGeneratedContent(mockContent);
+         setGenerationProgress(100);
+      } finally {
          setIsGenerating(false);
-         toast.info("No platforms or post types selected.");
       }
    };
 
