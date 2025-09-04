@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 700 150" fill="none">
+  <defs>
+    <!-- Gradient -->
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+
+    <!-- Text Glow Filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rasengan Spiral -->
+  <g transform="translate(80,100)">
+    <circle r="35" stroke="url(#grad)" stroke-width="3" fill="none"/>
+    <circle r="25" stroke="url(#grad)" stroke-width="2" fill="none"/>
+    <circle r="15" stroke="url(#grad)" stroke-width="2" fill="none"/>
+    <circle r="5" fill="url(#grad)">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Brand Text -->
+  <text x="160" y="115" font-family="'Poppins', sans-serif" font-size="56" font-weight="700"
+        fill="url(#grad)" filter="url(#glow)" letter-spacing="1">
+    Content Rasengan
+    <!-- <animate attributeName="letter-spacing" values="1;4;1" dur="3s" repeatCount="indefinite"/> -->
+  </text>
+</svg>

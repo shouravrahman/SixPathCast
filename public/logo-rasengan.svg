@@ -1,0 +1,46 @@
+<!-- Content Rasengan — Premium Spiral Mark (static) -->
+<svg width="1024" height="1024" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Brand gradient: cyan → violet -->
+    <linearGradient id="cr-brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00B5FF"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <!-- Soft aura glow behind the spiral -->
+    <radialGradient id="cr-aura" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#00B5FF" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#00B5FF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#00B5FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cr-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Transparent background; keep the mark standalone for any surface -->
+  <g transform="translate(128 128)">
+    <!-- Aura -->
+    <circle r="80" fill="url(#cr-aura)"/>
+
+    <!-- Outer broken ring (premium dash spacing) -->
+    <g filter="url(#cr-glow)">
+      <circle r="86" fill="none" stroke="url(#cr-brand)" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="88 38 16 38"/>
+    </g>
+
+    <!-- Mid spiral stroke -->
+    <path d="M -58 0a58 58 0 1 1 94 46c-18 14-46 10-58-8-8-12-6-26 6-34 10-6 22-4 28 4"
+          fill="none" stroke="#7AE9FF" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Inner spiral ring -->
+    <path d="M -34 0a34 34 0 1 1 54 27c-10 7-27 5-34-4-5-7-4-16 4-20 6-4 14-2 18 3"
+          fill="none" stroke="#BFF4FF" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Core -->
+    <circle r="6.5" fill="#E6FBFF"/>
+  </g>
+</svg>
